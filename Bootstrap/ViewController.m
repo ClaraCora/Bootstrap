@@ -110,43 +110,53 @@ void initFromSwiftUI()
         }
     }
 
-    [AppDelegate addLogText:[NSString stringWithFormat:@"ios-version: %@",UIDevice.currentDevice.systemVersion]];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        //代码 1
+        [AppDelegate addLogText:[NSString stringWithFormat:@"ios-version: %@",UIDevice.currentDevice.systemVersion]];
+        usleep(100000);
+        //代码 2
+        struct utsname systemInfo;
+        uname(&systemInfo);
+        [AppDelegate addLogText:[NSString stringWithFormat:@"device-model: %s",systemInfo.machine]];
+        usleep(100000);
+        //代码 3
+        [AppDelegate addLogText:[NSString stringWithFormat:@"app-version: %@",NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]]];
+        usleep(100000);
+        //代码 4
+        [AppDelegate addLogText:[NSString stringWithFormat:@"boot-session: %@",getBootSession()]];
+        usleep(100000);
+        //代码 5
+        [AppDelegate addLogText: isBootstrapInstalled()? Localized(@"bootstrap installed"):Localized(@"bootstrap not installed")];
+        usleep(100000);
+        //代码 6
+        [AppDelegate addLogText: isSystemBootstrapped()? Localized(@"system bootstrapped"):Localized(@"system not bootstrapped")];
+        usleep(100000);
+        //代码 7
+        SYSLOG("locale=%@", NSLocale.currentLocale.countryCode);
+        SYSLOG("locale=%@", [NSUserDefaults.appDefaults valueForKey:@"locale"]);
+        [NSUserDefaults.appDefaults setValue:NSLocale.currentLocale.countryCode forKey:@"locale"];
+        [NSUserDefaults.appDefaults synchronize];
+        SYSLOG("locale=%@", [NSUserDefaults.appDefaults valueForKey:@"locale"]);
 
-    struct utsname systemInfo;
-    uname(&systemInfo);
-    [AppDelegate addLogText:[NSString stringWithFormat:@"device-model: %s",systemInfo.machine]];
+            if(isSystemBootstrapped())
+            {
+                if(checkServer()) {
+                    [AppDelegate addLogText:Localized(@"bootstrap server check successful")];
+                }
 
-    [AppDelegate addLogText:[NSString stringWithFormat:@"app-version: %@",NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]]];
+                [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+                    checkServer();
+                }];
+            }
 
-    [AppDelegate addLogText:[NSString stringWithFormat:@"boot-session: %@",getBootSession()]];
-
-    [AppDelegate addLogText: isBootstrapInstalled()? Localized(@"bootstrap installed"):Localized(@"bootstrap not installed")];
-    [AppDelegate addLogText: isSystemBootstrapped()? Localized(@"system bootstrapped"):Localized(@"system not bootstrapped")];
-
-    SYSLOG("locale=%@", NSLocale.currentLocale.countryCode);
-    SYSLOG("locale=%@", [NSUserDefaults.appDefaults valueForKey:@"locale"]);
-    [NSUserDefaults.appDefaults setValue:NSLocale.currentLocale.countryCode forKey:@"locale"];
-    [NSUserDefaults.appDefaults synchronize];
-    SYSLOG("locale=%@", [NSUserDefaults.appDefaults valueForKey:@"locale"]);
-
-    if(isSystemBootstrapped())
-    {
-        if(checkServer()) {
-            [AppDelegate addLogText:Localized(@"bootstrap server check successful")];
-        }
-
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-            checkServer();
-        }];
-    }
-
-    if(!IconCacheRebuilding && isBootstrapInstalled() && !isSystemBootstrapped()) {
-        if([UIApplication.sharedApplication canOpenURL:[NSURL URLWithString:@"filza://"]]
-           || [LSPlugInKitProxy pluginKitProxyForIdentifier:@"com.tigisoftware.Filza.Sharing"])
-        {
-            [AppDelegate showMesage:Localized(@"It seems that you have the Filza app installed, which may be detected as jailbroken. You can enable Tweak for it to hide it.") title:Localized(@"Warning")];
-        }
-    }
+            if(!IconCacheRebuilding && isBootstrapInstalled() && !isSystemBootstrapped()) {
+                if([UIApplication.sharedApplication canOpenURL:[NSURL URLWithString:@"filza://"]]
+                   || [LSPlugInKitProxy pluginKitProxyForIdentifier:@"com.tigisoftware.Filza.Sharing"])
+                {
+                    [AppDelegate showMesage:Localized(@"It seems that you have the Filza app installed, which may be detected as jailbroken. You can enable Tweak for it to hide it.") title:Localized(@"Warning")];
+                }
+            }
+    });
 }
 
 @end
