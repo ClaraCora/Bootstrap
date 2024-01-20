@@ -219,7 +219,7 @@ struct ContentView: View {
                             .opacity(0.5)
                     }
                     
-                    Text("UI remade by ClaraCora. ")
+                    Text("UI made by haxi0. Remade by ClaraCora. ")
                         .font(Font.system(size: 13))
                         .opacity(0.1)
                 }
