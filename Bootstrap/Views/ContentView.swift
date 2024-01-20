@@ -33,14 +33,14 @@ struct ContentView: View {
     let screenHeight = UIScreen.main.bounds.height
     var body: some View {
         ZStack {
-            FluidGradient(blobs: [.red,Color.purple],
-                          highlights: [Color.purple, .yellow],
+            FluidGradient(blobs: [.green,Color.purple],
+                          highlights: [Color.purple, .blue],
                           speed: 0.5,
                           blur: 0.95)
             .background(.quaternary)
             .ignoresSafeArea()
             
-            VStack {
+            VStack(spacing: 0) {
                 HStack(spacing: 15) {
                     Image("Bootstrap")
                         .resizable()
@@ -72,6 +72,7 @@ struct ContentView: View {
                     })
                 }
                 .padding(20)
+                .padding(.top, 20)
                 
                 if newVersionAvailable {
                     Button {
@@ -85,6 +86,39 @@ struct ContentView: View {
                     .frame(height:20)
                     .padding(.top, -20)
                     .padding(10)
+                }
+                Spacer()
+                
+                VStack(spacing: screenHeight * 0.02) {
+                    ScrollView {
+                        ScrollViewReader { scroll in
+                            VStack(alignment: .leading) {
+                                ForEach(0..<LogItems.count, id: \.self) { LogItem in
+                                    Text("\(String(LogItems[LogItem]))")
+                                        .textSelection(.enabled)
+                                        .font(.custom("Menlo", size: 15))
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("LogMsgNotification"))) { obj in
+                                DispatchQueue.global(qos: .utility).async {
+                                    LogItems.append((obj.object as! NSString) as String.SubSequence)
+                                    scroll.scrollTo(LogItems.count - 1)
+                                }
+                            }
+                        }
+                    }
+                    .frame(maxHeight: screenHeight * 0.8) // 设置最大高度，填满剩余高度
+                    .frame(width: screenWidth * 0.8) // 设置宽度为 screenWidth*0.8
+                    .padding(20)
+                    .background {
+                        Color(.black)
+                            .cornerRadius(20)
+                            .opacity(0.5)
+                    }
+                    .multilineTextAlignment(.leading) // 文字左对齐
+
+                    Spacer() // 让下面的元素填满剩余高度
                 }
                 
                 VStack(spacing: screenHeight * 0.02) {
@@ -190,57 +224,35 @@ struct ContentView: View {
                         
                     }
                     
-                    VStack(spacing: screenHeight * 0.02) {
-                        ScrollView {
-                            ScrollViewReader { scroll in
-                                VStack(alignment: .leading) {
-                                    ForEach(0..<LogItems.count, id: \.self) { LogItem in
-                                        Text("\(String(LogItems[LogItem]))")
-                                            .textSelection(.enabled)
-                                            .font(.custom("Menlo", size: 15))
-                                            .foregroundColor(.white)
-                                    }
-                                }
-                                .onReceive(NotificationCenter.default.publisher(for: Notification.Name("LogMsgNotification"))) { obj in
-                                    DispatchQueue.global(qos: .utility).async {
-                                        LogItems.append((obj.object as! NSString) as String.SubSequence)
-                                        scroll.scrollTo(LogItems.count - 1)
-                                    }
-                                }
-                            }
-                        }
-                        .frame(maxHeight: 200)
-                    }
-                    .frame(width: screenWidth*0.8)
-                    .padding(20)
-                    .background {
-                        Color(.black)
-                            .cornerRadius(20)
-                            .opacity(0.5)
-                    }
                     
-                    Text("UI made by haxi0. Remade by ClaraCora. ")
-                        .font(Font.system(size: 13))
-                        .opacity(0.1)
+                    
+                    
                 }
+                .padding(.bottom)
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            Button {
-                withAnimation {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    showCredits.toggle()
+            HStack {
+                Text("UI by haxi0. ClaraCora Special Edition.   ")
+                    .font(Font.system(size: 13))
+                    .opacity(0.1)
+                    .frame(height: 30, alignment: .bottom) // 设置统一的高度
+
+                Button {
+                    withAnimation {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        showCredits.toggle()
+                    }
+                } label: {
+                    Label(
+                        title: { Text("Credits").opacity(0.3) },
+                        icon: { Image(systemName: "person").opacity(0.3) }
+                    )
+                    .foregroundColor(Color.gray) // 设置按钮标题的颜色为灰色
                 }
-            } label: {
-                Label(
-                    title: { Text("Credits").opacity(0.2) },
-                    icon: { Image(systemName: "person").opacity(0.2) }
-                )
-                .foregroundColor(Color.gray) // 设置按钮标题的颜色为灰色
+                .frame(height: 30, alignment: .bottom) // 设置统一的高度
+                .padding(1)
             }
-            .frame(height:30, alignment: .bottom)
-            .padding(10)
-            
         }
         .overlay {
             if showCredits {
