@@ -123,7 +123,9 @@ void initFromSwiftUI()
         [AppDelegate addLogText:[NSString stringWithFormat:Localized(@"app-version: %@"),NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]]];
         usleep(100000);
         //代码 4
-        [AppDelegate addLogText:[NSString stringWithFormat:Localized(@"boot-session: %@"),getBootSession()]];
+        [AppDelegate addLogText:[NSString stringWithFormat:Localized(@"boot-session: "),""]];
+        usleep(100000);
+        [AppDelegate addLogText:[NSString stringWithFormat:Localized(@" %@"),getBootSession()]];
         usleep(100000);
         //代码 5
         [AppDelegate addLogText: isBootstrapInstalled()? Localized(@"bootstrap installed"):Localized(@"bootstrap not installed")];
