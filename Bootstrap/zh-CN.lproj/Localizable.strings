@@ -6,13 +6,15 @@
 
 "The current iOS version is not supported yet, we may add support in a future version." = "当前运行的 iOS 版本尚未支持，也许我们稍后会在未来的版本中添加支持。";
 
-"ios-version: %@" = "iOS 版本：%@";
+"ios-version: %@" = "iOS版本：%@";
 
 "device-model: %s" = "设备型号：%s";
 
 "app-version: %@" = "应用版本：%@";
 
 "boot-session: %@" = "启动会话：%@";
+
+"boot-session: " = "启动会话：";
 
 "bootstrap installed" = "引导已安装";
 
