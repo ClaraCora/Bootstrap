@@ -112,18 +112,18 @@ void initFromSwiftUI()
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         //代码 1
-        [AppDelegate addLogText:[NSString stringWithFormat:@"ios-version: %@",UIDevice.currentDevice.systemVersion]];
+        [AppDelegate addLogText:[NSString stringWithFormat:Localized(@"ios-version: %@"),UIDevice.currentDevice.systemVersion]];
         usleep(100000);
         //代码 2
         struct utsname systemInfo;
         uname(&systemInfo);
-        [AppDelegate addLogText:[NSString stringWithFormat:@"device-model: %s",systemInfo.machine]];
+        [AppDelegate addLogText:[NSString stringWithFormat:Localized(@"device-model: %s"),systemInfo.machine]];
         usleep(100000);
         //代码 3
-        [AppDelegate addLogText:[NSString stringWithFormat:@"app-version: %@",NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]]];
+        [AppDelegate addLogText:[NSString stringWithFormat:Localized(@"app-version: %@"),NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]]];
         usleep(100000);
         //代码 4
-        [AppDelegate addLogText:[NSString stringWithFormat:@"boot-session: %@",getBootSession()]];
+        [AppDelegate addLogText:[NSString stringWithFormat:Localized(@"boot-session: %@"),getBootSession()]];
         usleep(100000);
         //代码 5
         [AppDelegate addLogText: isBootstrapInstalled()? Localized(@"bootstrap installed"):Localized(@"bootstrap not installed")];
