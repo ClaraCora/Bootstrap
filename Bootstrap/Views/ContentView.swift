@@ -54,6 +54,13 @@ struct ContentView: View {
                                 Text("Respring")
                                 Image(systemName: "arrow.clockwise")
                             }
+                            Button(action: {
+                                // 在确认后运行 rebootAction()
+                                rebootAction()
+                            }) {
+                                Text("Reboot")
+                                Image(systemName: "power")
+                            }
                         }
                     VStack(alignment: .leading, content: {
                         Text("Bootstrap")
