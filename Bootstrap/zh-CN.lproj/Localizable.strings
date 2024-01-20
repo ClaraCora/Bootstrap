@@ -59,6 +59,9 @@
 
 "Reboot Device" = "重启设备";
 "The current bootstrapped version is inconsistent with the Bootstrap app version, and you need to reboot the device to update it." = "当前 Bootstrap 环境和 Bootstrap 应用程序不一致，你需要重启设备后更新环境。";
+"Are you sure to reboot device?" = "你确定要重启设备吗？";
+"Reboot" = "重启";
+"Sure" = "确定";
 
 "Your trollstore version is too old, Bootstrap only supports trollstore>=2.0, you have to update your trollstore then reinstall Bootstrap app." = "你的 TrollStore 版本太低，Bootstrap 需要 TrollStore 2.0 或更高版本，请更新 TrollStore 后再次尝试安装 Bootstrap。";
 
@@ -72,3 +75,10 @@
 "respring now..." = "正在注销";
 
 "Are you sure to uninstall bootstrap?\n\nPlease make sure you have disabled tweak for all apps before uninstalling." = "你确定要卸载 Bootstrap 吗？\n\n请在卸载之前确保已经在“应用列表”中关闭了所有应用的注入。";
+
+
+"ios-version: %@" = "iOS 版本：%@";
+"device-model: %s" = "设备型号：%s";
+"app-version: %@" = "应用版本：%@";
+"boot-session: %@" = "启动会话：%@";
+"boot-session: " = "启动会话：";
