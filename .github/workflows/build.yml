@@ -47,7 +47,7 @@ jobs:
         run: |
           echo "Available SDKs: $(find $THEOS/sdks -name "*.sdk" -maxdepth 1 -print)"
           echo "FINALPACKAGE=1" >> $GITHUB_ENV
-          cd $GITHUB_WORKSPACE/TrollSpeed
+          cd $GITHUB_WORKSPACE/Bootstrap
           git fetch --tags
       
           # Extract the tag from GITHUB_REF
