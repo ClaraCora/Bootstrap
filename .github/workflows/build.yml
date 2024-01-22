@@ -43,15 +43,28 @@ jobs:
           name: Bootstrap
           path: ./packages/*.tipa
 
+      - name: Setup build environment
+        run: |
+          echo "Available SDKs: $(find $THEOS/sdks -name "*.sdk" -maxdepth 1 -print)"
+          echo "FINALPACKAGE=1" >> $GITHUB_ENV
+          cd $GITHUB_WORKSPACE/TrollSpeed
+          git fetch --tags
+      
+          # Extract the tag from GITHUB_REF
+          TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
+          echo "GIT_TAG=$TAG" >> $GITHUB_ENV
+
 
       - name: Generate Tag & Release Name
         id: generate_name
         run: |
-          time=$(date +%Y%m%d%H%M%S)
-          release_tag="$time"
-          release_name="Bootstrap-$(date +%Y%m%d%H%M%S)"
+          # Using the previously obtained GIT_TAG as the release tag and name
+          release_tag="${{ env.GIT_TAG }}"
+          release_name="${{ env.GIT_TAG }}"
           echo "release_name=$release_name" >> $GITHUB_OUTPUT
-          echo "release_tag=$release_tag" >> $GITHUB_OUTPUT    
+          echo "release_tag=$release_tag" >> $GITHUB_OUTPUT
+
+   
       - name: Upload release
         uses: ncipollo/release-action@v1
         with:
