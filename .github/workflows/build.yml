@@ -66,9 +66,10 @@ jobs:
 
    
       - name: Upload release
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v1
         with:
-          artifacts: ./packages/*.tipa
+          files: |
+            ./packages/*.tipa
           name: ${{ steps.generate_name.outputs.release_name }}
           tag: ${{ steps.generate_name.outputs.release_tag }}
           token: ${{ secrets.RELEASE_GITHUB_TOKEN }}
