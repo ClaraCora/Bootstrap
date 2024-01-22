@@ -3,7 +3,7 @@ name: Build_Bootstrap
 on:
   push:
     tags:
-      - "v*.*.*"
+      - "*.*"
 
 jobs:
   build:
