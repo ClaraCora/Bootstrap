@@ -36,7 +36,13 @@ jobs:
       - name: Build Bootstrap
         run: |
           make package
-          mv ./packages/Bootstrap.tipa ./packages/Bootstrap_CCUI_1.x.tipa
+          
+          # Extract the version from the tag
+          VERSION=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
+          
+          # Rename the file with the version
+          mv ./packages/Bootstrap.tipa ./packages/Bootstrap_CCUI_${VERSION}.tipa
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
