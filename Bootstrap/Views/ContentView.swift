@@ -26,6 +26,7 @@ struct ContentView: View {
     @State private var strapButtonDisabled = false
     @State private var newVersionAvailable = false
     @State private var newVersionReleaseURL:String = ""
+    @State private var newVersionReleaseURL2:String = ""
     @State private var tweakEnable: Bool = !isSystemBootstrapped() || FileManager.default.fileExists(atPath: jbroot("/var/mobile/.tweakenabled"))
     
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
@@ -76,16 +77,30 @@ struct ContentView: View {
                 
                 if newVersionAvailable {
                     Button {
-                        UIApplication.shared.open(URL(string: newVersionReleaseURL)!)
                     } label: {
                         Label(
                             title: { Text("New Version Available") },
                             icon: { Image(systemName: "arrow.down.app.fill") }
                         )
                     }
-                    .frame(height:20)
+                    .frame(height: 20)
                     .padding(.top, -20)
                     .padding(10)
+                    .onTapGesture {
+                        // Show an ActionSheet when the button is tapped
+                        let actionSheet = ActionSheet(title: Text("Choose an option"), buttons: [
+                            .default(Text("去 GitHub 下载"), action: {
+                                // Add the logic for the "去 GitHub 下载" option
+                                UIApplication.shared.open(URL(string: newVersionReleaseURL)!)
+                            }),
+                            .default(Text("直接用巨魔安装"), action: {
+                                // Add the logic for the "直接用巨魔安装" option
+                                UIApplication.shared.open(URL(string: newVersionReleaseURL2)!)
+                            }),
+                            .cancel()
+                        ])
+
+                    }
                 }
                 Spacer()
                 
@@ -294,6 +309,7 @@ struct ContentView: View {
             if let latestTag = releasesJSON.first?["tag_name"] as? String, latestTag != currentAppVersion {
                 newVersionAvailable = true
                 newVersionReleaseURL = "https://github.com/\(owner)/\(repo)/releases/tag/\(latestTag)"
+                newVersionReleaseURL2 = "apple-magnifier://install?url=https://github.com/\(owner)/\(repo)/releases/tag/\(latestTag)/Bootstrap_CCUI_\(latestTag).tipa"
             }
         }
     }
