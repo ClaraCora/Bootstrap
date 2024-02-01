@@ -34,12 +34,28 @@ struct ContentView: View {
     let screenHeight = UIScreen.main.bounds.height
     var body: some View {
         ZStack {
-            FluidGradient(blobs: [.green,Color.purple],
-                          highlights: [Color.purple, .blue],
-                          speed: 0.5,
-                          blur: 0.95)
-            .background(.quaternary)
-            .ignoresSafeArea()
+            if let bgImageURL = Bundle.main.url(forResource: "bg", withExtension: "png"),
+                           FileManager.default.fileExists(atPath: bgImageURL.path) {
+                            FluidGradient(blobs: [.green, Color.purple],
+                                          highlights: [Color.purple, .blue],
+                                          speed: 0.5,
+                                          blur: 0.95)
+                                .background(.quaternary)
+                                .ignoresSafeArea()
+                                .overlay(
+                                    Image(uiImage: UIImage(contentsOfFile: bgImageURL.path)!)
+                                        .resizable()
+                                        .scaledToFill()
+                                )
+                        } else {
+                            // 没有图片时的默认动态背景
+                            FluidGradient(blobs: [.green, Color.purple],
+                                          highlights: [Color.purple, .blue],
+                                          speed: 0.5,
+                                          blur: 0.95)
+                                .background(.quaternary)
+                                .ignoresSafeArea()
+                        }
             
             VStack(spacing: 0) {
                 HStack(spacing: 15) {
