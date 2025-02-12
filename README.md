@@ -1,3 +1,4 @@
+[本项目app热更新部分由 YxVM 强力驱动](https://yxvm.com).
 # Bootstrap
 
 [![GitHub stars](https://img.shields.io/github/stars/roothide/Bootstrap?style=social)](https://github.com/roothide/Bootstrap/stargazers)
